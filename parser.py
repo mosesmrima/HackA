@@ -1,5 +1,5 @@
 """
-this module contains functions that work to parser instructions into components/tokens
+this module contains functions that work to parse instructions into components/tokens
 """
 from code import destination
 from code import jump
