@@ -38,5 +38,83 @@ beginning of a code section hence each label is replaced with line number of the
   *The symbol table has been implemented using a dictionary with the symbol name as the key and the address as the value*
 
 
+## Usage
 
-  
+```bash
+./hackaA.py Example.asm
+```
+You can also pass a path to the source code file:
+```bash
+./hacka.py ~/Desktop/Example.asm
+```
+The resting .hack file will be saved in the current working directory.
+### Example.asm source file
+```asm
+// Computes R0 = 2 + 3  (R0 refers to RAM[0])
+
+@2
+D=A
+@3
+D=D+A
+@0
+M=D
+```
+### Resulting Example.hack file
+```binary
+0000000000000010
+1110110000010000
+0000000000000011
+1110000010010000
+0000000000000000
+1110001100001000
+```
+
+## An Overview of the Hack Assembly Language
+
+  Hack is a simple, minimal, yet elegant and powerful assembly language developed for the 16-bit Hack Computer Architecture.
+  Comments are lines that begin with //, `// this is a comment`. The HackA assembler ignores all comments 
+  and whitespace in the source file.
+  Labels are declared as follows:
+  ```asm
+  (LOOP)
+  ....
+  // instructions
+  ...
+  @LOOP
+  0;JMP
+  ```
+There are two types of instructions in Hack:
+
+### A-instructions
+`@value`, where value is either a non-negative constant, or a symbol.
+The effects of the A-instructions are:
+1. if `value` is a non-negative integer, the **A register** is set to the specified value hence selecting RAM[VALUE] as 
+the currently referenced memory location. Apart from referencing memory locations, this is also the only way to load constants
+into registers.
+   ```asm
+   @21  // load 21 into the A register, currently selected RAM adress is RAM[21]
+   D=A  // set register D to A, A=21... that is D is set to 21
+   ```
+2. If `value` is a symbol, then the A register is set to the value of what the symbol refers to in the symbol table. That is
+   if `value` is a variable, the **A register** is set to the value of the variable in the symbol table. 
+
+   ```asm
+       @var  // var is a refrence to a variable
+       D=M // where M is RAM[A]
+   ```
+   If `value` is a 
+   label, then the **A register** is set to the value of the line number(after stripping whitespaces and comments) of the first instruction in the codeblock where the
+   label was declared.
+
+    ```
+   (LOOP)  // this is how to declare a symbol
+    ....
+   // instructions
+   ...
+   @LOOP // set A register to the address of the first instruction inside LOOP 
+   0;JMP   // jump back to the begining of LOOP
+    ```
+ 
+
+The opcode of an A-instruction is zero that is `0xxxxxxxxxxxxxx`, where `x` is a bit.
+### C-instructions
