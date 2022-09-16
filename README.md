@@ -106,7 +106,7 @@ into registers.
    label, then the **A register** is set to the value of the line number(after stripping whitespaces and comments) of the first instruction in the codeblock where the
    label was declared.
 
-    ```
+    ```asm
    (LOOP)  // this is how to declare a symbol
     ....
    // instructions
