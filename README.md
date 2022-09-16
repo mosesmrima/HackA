@@ -118,3 +118,28 @@ into registers.
 
 The opcode of an A-instruction is zero that is `0xxxxxxxxxxxxxx`, where `x` is a bit.
 ### C-instructions
+These are instructions used to perform computations. The general format of a C-instruction is:
+
+*DEST*=*COMP*;*JUMP*
+Where:
+1. *DEST* is the destination register to store the result of a computation.
+2. *COMP* is the computation to be performed.
+3. *JUMP* is an optional jump directive to specify the next instruction to be executed
+
+Example code:
+
+```asm
+(LOOP)
+@1 // set A=1
+D=A;  // effectively setting D to 1
+@LOOP   // where you want to jump to
+D;JNQ    //re-execute the loop if D is not equal to zero
+```
+
+The opcode of C-instruction is 1 with a general binary format of `1 1 1 a c1 c2 c3 c4 c5 c6 d1 d2 d3 j1 j2 j3`, where:
+- `111` bits: C-Instructions always begin with bits `111`.
+- `a` bit: Chooses to load the contents of either **A** register or **M** (Main Memory register addressed by **A**) into the ALU for computation.
+- Bits `c1` through `c6`: Control bits expected by the ALU to specify the operation to be performed.
+- Bits `d1` through `d3`: Specify which memory location to store the result of ALU computation into: **A**, **D** or **M**.
+- Bits `j1` through `j3`: Specify which JUMP directive to execute (either conditional or unconditional).
+
